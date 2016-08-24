@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 })
 
 export class HeroesComponent implements OnInit {
+  error: any;
   heroes: Hero[];
   selectedHero: Hero;
 
@@ -35,5 +36,26 @@ export class HeroesComponent implements OnInit {
 
   gotoDetail(): void {
     this.router.navigate(['/detail', this.selectedHero.id]);
+  }
+
+  addHero(): void {
+    this.addingHero = true;
+    this.selectedHero = null;
+  }
+
+  close(savedHero: Hero): void {
+    this.addingHero = false;
+    if (savedHero) { this.getHeroes(); }
+  }
+
+  deleteHero(hero: Hero, event: any): void {
+    event.stopPropagation();
+    this.heroService
+      .delete(hero)
+      .then(res => {
+        this.heroes = this.heroes.filter(h => h !== hero);
+        if (this.selectedHero === hero) { this.selectedHero = null; }
+      })
+    .catch(error => this.error = error);
   }
 }
