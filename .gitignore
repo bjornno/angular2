@@ -2,3 +2,4 @@
 *.jsx
 build
 node_modules
+typings
